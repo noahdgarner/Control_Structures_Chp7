@@ -202,6 +202,7 @@ def printMultiTable() {
     var j = 1
     // both i and j in scope here
     while (j <= 10) {
+      //toString so we can call.toString on (i*j) to find prod.length
       val prod = (i * j).toString
       // i, j, and prod in scope here
       var k = prod.length
@@ -219,5 +220,28 @@ def printMultiTable() {
   }
   // i still in scope; j, prod, and k out of scope
 }
-
 printMultiTable()
+
+//here is a refactored version of the multiply table as a functional style
+//returns a row as a sequence
+// Returns a row as a sequence
+def makeRowSeq(row: Int) =
+  for (col <- 1 to 10) yield {
+    val prod = (row * col).toString
+    val padding = " " * (4 - prod.length)
+    padding + prod
+  }
+// Returns a row as a string
+def makeRow(row: Int) = makeRowSeq(row).mkString
+// Returns table as a string with one row per line
+def multiTable() = {
+  //return a sequence of row strings, so tableseq look like string 1:"___1___2___3..." string 2:"___2___4___6..." etc
+  val tableSeq = for (row <- 1 to 10) yield makeRow(row)
+  //this puts an end of line character between each string
+  println(tableSeq(9))
+  tableSeq.mkString("\n")
+}
+
+println(multiTable())
+
+
